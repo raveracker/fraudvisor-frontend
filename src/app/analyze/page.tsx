@@ -1,27 +1,27 @@
 // app/analyze/page.tsx (or wherever this page lives)
-"use client";
+'use client';
 
-import { Settings } from "lucide-react";
-import Link from "next/link";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import type { Website } from "~types/website";
-import { WebsiteLogo } from "~app/components/logo";
-import { Button } from "~components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~components/ui/card";
-import { Input } from "~components/ui/input";
-import { Label } from "~components/ui/label";
-import { getWebsiteData } from "~app/website/actions";
-import { toOrigin } from "~helpers/url";
-import { WebsiteView } from "~views/website";
-import { Loading } from "~views/loading";
+import { Settings } from 'lucide-react';
+import Link from 'next/link';
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import type { Website } from '~types/website';
+import { WebsiteLogo } from '~app/components/logo';
+import { Button } from '~components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '~components/ui/card';
+import { Input } from '~components/ui/input';
+import { Label } from '~components/ui/label';
+import { getWebsiteData } from '~app/website/actions';
+import { toOrigin } from '~helpers/url';
+import { WebsiteView } from '~views/website';
+import { Loading } from '~views/loading';
 
 // IMPORTANT: import the server action (with 'use server' in its file)
 
 export default function AnalyzePage() {
   const router = useRouter();
-  const [url, setUrl] = useState<string>("");
+  const [url, setUrl] = useState<string>('');
   const [data, setData] = useState<Website | null>(null);
   const [error, setError] = useState<unknown>(null);
   const [isWebsiteLoading, setIsWebsiteLoading] = useState<boolean>(false);
@@ -32,21 +32,21 @@ export default function AnalyzePage() {
 
     const input = url.trim();
     if (!input) {
-      toast.error("Please enter a website URL");
+      toast.error('Please enter a website URL');
       return;
     }
     setIsWebsiteLoading(true);
     setError(null);
-    // const normalizedUrl = toOrigin(url);
+    const normalizedUrl = toOrigin(url);
     try {
-      const website = await getWebsiteData(input);
+      const website = await getWebsiteData(normalizedUrl);
       if (website) setData(website);
       setIsWebsiteLoading(false);
     } catch (err) {
       console.error(err);
       setError(err);
       toast.error(
-        "Something went wrong while analyzing the website. Please try again?"
+        'Something went wrong while analyzing the website. Please try again?',
       );
     } finally {
       setIsWebsiteLoading(false);
@@ -81,7 +81,7 @@ export default function AnalyzePage() {
                 if (!e.defaultPrevented) handleSubmit();
               }}
             >
-              {disabled ? "Analyzing..." : "Analyze"}
+              {disabled ? 'Analyzing...' : 'Analyze'}
             </Button>
           </form>
         </CardContent>
